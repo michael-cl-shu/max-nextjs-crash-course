@@ -33,6 +33,25 @@ export class ProductsService {
     }
   }
 
+  async updateProductById(
+    id: string,
+    title: string,
+    description: string,
+    price: number,
+  ) {
+    const result = await this.productModel.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+        price,
+      },
+      { new: true },
+    );
+
+    return this.mapProduct(result);
+  }
+
   private mapProduct(prod: any) {
     return {
       id: prod.id,
