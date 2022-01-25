@@ -16,4 +16,14 @@ export class ProductsService {
 
     return { id: result.id };
   }
+
+  async getProducts() {
+    const products = (await this.productModel.find()) as Product[];
+    return products.map((prod) => ({
+      id: prod.id,
+      title: prod.title,
+      description: prod.description,
+      price: prod.price,
+    }));
+  }
 }
