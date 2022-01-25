@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from './product.model';
@@ -19,11 +19,26 @@ export class ProductsService {
 
   async getProducts() {
     const products = (await this.productModel.find()) as Product[];
-    return products.map((prod) => ({
+    return products.map((prod) => this.mapProduct(prod));
+  }
+
+  async getProductById(id: string) {
+    let product;
+
+    try {
+      product = await this.productModel.findById(id);
+      return this.mapProduct(product);
+    } catch (error) {
+      throw new NotFoundException(`Can not find the product id: ${id}`);
+    }
+  }
+
+  private mapProduct(prod: any) {
+    return {
       id: prod.id,
       title: prod.title,
       description: prod.description,
       price: prod.price,
-    }));
+    };
   }
 }
