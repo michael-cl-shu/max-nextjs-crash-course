@@ -52,6 +52,10 @@ export class ProductsService {
     return this.mapProduct(result);
   }
 
+  async deleteProductById(id: string) {
+    const result = await this.productModel.deleteOne({ _id: id });
+    return result;
+  }
   private mapProduct(prod: any) {
     return {
       id: prod.id,
